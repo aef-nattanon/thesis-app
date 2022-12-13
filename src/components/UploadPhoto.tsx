@@ -158,7 +158,13 @@ function UploadPhoto({ id }: { id: string }) {
           <>
             <Image width={200} src={resultImages.meter} />
             <Image width={200} src={resultImages.number} />
-            <h2>{result.join()}</h2>
+            <h1>{result.join()}</h1>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <h1>ไม่เจอ</h1>
           </>
         );
       }
