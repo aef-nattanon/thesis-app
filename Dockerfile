@@ -24,12 +24,5 @@ EXPOSE 8080
 EXPOSE 80
 # Start nginx
 
-FROM nginx:alpine
 
-WORKDIR /usr/share/nginx/html
-
-RUN rm -rf *
-
-COPY --from=builder /app/dist .
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["npm", "start-sw"]
