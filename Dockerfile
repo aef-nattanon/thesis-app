@@ -21,6 +21,7 @@ ENV THESIS_API_URL=${THESIS_API_URL}
 
 # Expose port
 EXPOSE 8080
+EXPOSE 80
 # Start nginx
 
 FROM nginx:alpine
