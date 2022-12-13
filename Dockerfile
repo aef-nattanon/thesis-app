@@ -25,4 +25,4 @@ EXPOSE 80
 # Start nginx
 
 
-ENTRYPOINT ["npm", "start-sw"]
+ENTRYPOINT ["npm", "run", "start-sw"]
