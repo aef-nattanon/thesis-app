@@ -11,7 +11,7 @@ RUN npm install -g typescript
 RUN npm link typescript
 RUN npm install react-scripts -g
 
-RUN react-scripts build GENERATE_SOURCEMAP=false
+RUN npm run build
 
 # Bundle static assets with nginx
 # FROM nginx:1.21.0-alpine as production
@@ -22,4 +22,13 @@ ENV THESIS_API_URL=${THESIS_API_URL}
 # Expose port
 EXPOSE 8080
 # Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+
+FROM nginx:alpine
+
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf *
+
+COPY --from=builder /app/dist .
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
