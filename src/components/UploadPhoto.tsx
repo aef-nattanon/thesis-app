@@ -152,21 +152,22 @@ function UploadPhoto({ id }: { id: string }) {
             <Spin />
           </div>
         );
-      }
-      if (resultImages?.meter && resultImages?.number) {
-        return (
-          <>
-            <Image width={200} src={resultImages.meter} />
-            <Image width={200} src={resultImages.number} />
-            <h1>{result.join()}</h1>
-          </>
-        );
       } else {
-        return (
-          <>
-            <h1>ไม่เจอ</h1>
-          </>
-        );
+        if (resultImages?.meter && resultImages?.number && result) {
+          return (
+            <>
+              <Image width={200} src={resultImages.meter} />
+              <Image width={200} src={resultImages.number} />
+              <h1>{result.join()}</h1>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <h1>ไม่เจอ</h1>
+            </>
+          );
+        }
       }
     }
     return "";
