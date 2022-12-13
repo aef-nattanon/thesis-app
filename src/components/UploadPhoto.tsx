@@ -1,7 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Col, Image, List, Progress, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
-import { collection, deleteDoc, DocumentData, getDocs, orderBy, query } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  DocumentData,
+  DocumentReference,
+  DocumentSnapshot,
+  getDocs,
+  limit,
+  query,
+  where,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { ChangeEvent, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -9,7 +20,15 @@ import config from '../config';
 import { db, storage } from '../firebaseConfig';
 import { callDetection } from '../hooks/fetch';
 
-function UploadPhoto({ id }: { id: string }) {
+function UploadPhoto({
+  id,
+  houseRef,
+  house,
+}: {
+  id: string;
+  houseRef: DocumentReference;
+  house: DocumentSnapshot | null;
+}) {
   // State to store uploaded file
   const [file, setFile] = useState<File | null>(null); // progress
   const [url, setUrl] = useState(""); // progress
@@ -36,12 +55,16 @@ function UploadPhoto({ id }: { id: string }) {
 
   const fetchPhoto = useCallback(async () => {
     setPhotoLoading(true);
-    await getDocs(query(photosCollection, orderBy("cerate_at"))).then(
-      (querySnapshot) => {
-        const docs = querySnapshot.docs;
-        setPhotos(docs);
-      },
+    const q = query(
+      photosCollection,
+      where("house", "==", houseRef),
+      // orderBy("cerate_at", "desc"),
+      limit(25),
     );
+    await getDocs(q).then((querySnapshot) => {
+      const docs = querySnapshot.docs;
+      setPhotos(docs);
+    });
     setPhotoLoading(false);
   }, []);
 
@@ -50,39 +73,26 @@ function UploadPhoto({ id }: { id: string }) {
       setUploadPhoto(true);
       console.log("in", url);
       await callDetection(url)
-        .then((response) => {
-          console.log("response0000000", response);
+        .then(async (response) => {
           if (response.data) {
             setResultImages(response.data?.result_image);
             setResult(response.data?.number);
+            await addDoc(photosCollection, {
+              image: url,
+              result_meter_image: response.data?.result_image?.meter,
+              result_number_image: response.data?.result_image?.number,
+              result: response.data?.number,
+              cerate_at: dayjs(new Date()).format(),
+              house: houseRef,
+            }).then(() => {
+              fetchPhoto();
+            });
           }
           console.log(JSON.stringify(response.data));
         })
         .catch((error) => {
           console.log(error);
         });
-
-      // .then((response) => {
-      //   console.log("0000000-res", response);
-      //   return response.json();
-      // })
-      // .then((json) => {
-      //   console.log("0000000", json);
-      //   // try {
-      //   //   const docRef = await addDoc(photosCollection, {
-      //   //     cerate_at: dayjs(new Date()).format(),
-      //   //     url: url,
-      //   //   });
-      //   //   fetchPhoto();
-      //   // } catch (e) {
-      //   //   console.error("Error adding document: ", e);
-      //   // }
-      // })
-      // .catch((error) => {
-      //   console.log("error: ", error);
-      // });
-
-      console.log("out", url);
       setUploadPhoto(false);
     },
     [url],
@@ -149,17 +159,29 @@ function UploadPhoto({ id }: { id: string }) {
       if (uploadPhoto) {
         return (
           <div className="grid content-center justify-items-center w-full">
-            <Spin />
+            <Spin tip="กำลังอ่านมิเตอร์" />
           </div>
         );
       } else {
         if (resultImages?.meter && resultImages?.number && result) {
           return (
-            <>
-              <Image width={200} src={resultImages.meter} />
-              <Image width={200} src={resultImages.number} />
-              <h1>{result.join()}</h1>
-            </>
+            <Row>
+              <Col span={12}>
+                <Image width={150} src={resultImages.meter} />
+              </Col>
+              <Col span={12}>
+                <Row>
+                  <Col>
+                    <Image width={150} src={resultImages.number} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <h1>{result.join()}</h1>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           );
         } else {
           return (
@@ -203,7 +225,7 @@ function UploadPhoto({ id }: { id: string }) {
         </Col>
       </Row>
       <Row>
-        <Col span={10}>{url ? <Image width={200} src={url} /> : ""}</Col>
+        <Col span={10}>{url ? <Image width={150} src={url} /> : ""}</Col>
         <Col span={14}>{resultImage()}</Col>
       </Row>
       <Row>
@@ -214,23 +236,47 @@ function UploadPhoto({ id }: { id: string }) {
             <List
               dataSource={photos}
               renderItem={(photo) => (
-                <List.Item
-                  key={photo.id}
-                  actions={[
-                    <Button
-                      disabled={false}
-                      className="btn"
-                      onClick={() => deletePhoto(photo)}>
-                      ลบ
-                    </Button>,
-                  ]}>
-                  <List.Item.Meta title={photo?.data()?.house_number} />
-                  <List.Item.Meta
-                    title={dayjs(photo?.data()?.cerate_at).format(
-                      "DD-MMM-YYYY HH:mm:ss",
-                    )}
-                  />
-                </List.Item>
+                <>
+                  <List.Item
+                    key={photo.id}
+                    actions={[
+                      <Button
+                        disabled={false}
+                        className="btn"
+                        onClick={() => deletePhoto(photo)}>
+                        ลบ
+                      </Button>,
+                    ]}>
+                    <List.Item.Meta
+                      avatar={<Image width={50} src={photo?.data()?.image} />}
+                    />
+
+                    <List.Item.Meta
+                      avatar={
+                        <Image
+                          width={50}
+                          src={photo?.data()?.result_meter_image}
+                        />
+                      }
+                    />
+
+                    <List.Item.Meta
+                      avatar={
+                        <Image
+                          width={50}
+                          src={photo?.data()?.result_number_image}
+                        />
+                      }
+                    />
+
+                    <List.Item.Meta title={photo?.data()?.result.join()} />
+                    <List.Item.Meta
+                      title={dayjs(photo?.data()?.cerate_at).format(
+                        "DD-MMM-YYYY HH:mm:ss",
+                      )}
+                    />
+                  </List.Item>
+                </>
               )}>
               {photoLoading && (
                 <div className="grid content-center justify-items-center w-full">
