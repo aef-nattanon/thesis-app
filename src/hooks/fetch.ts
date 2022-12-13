@@ -2,16 +2,13 @@ import axios from 'axios';
 
 import config from '../config';
 
-var configFetch = (url: string) => {
-  return {
+export const callDetection = (url: string) =>
+  axios({
     method: "post",
     url: `${config.THESIS_API_URL}/detection`,
     headers: {
-      "User-Agent": " WHENEVER",
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
-    data: JSON.stringify({ url }),
-  };
-};
-
-export const callDetection = (url: string) => axios(configFetch(url));
+    data: JSON.stringify({ url: url }),
+  });

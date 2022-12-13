@@ -18,6 +18,12 @@ function UploadPhoto({ id }: { id: string }) {
   const [uploadStatus, setUploadStatus] = useState(false);
   const [uploadPhoto, setUploadPhoto] = useState(false);
   const [photoLoading, setPhotoLoading] = useState(false);
+  const [result, setResult] = useState<string[]>([]);
+  const [resultImages, setResultImages] = useState<{
+    meter: string;
+    number: string;
+  } | null>(null);
+
   const [photos, setPhotos] = useState<DocumentData[]>([]);
   const photosCollection = useMemo(() => collection(db, "photos"), []);
 
@@ -44,10 +50,15 @@ function UploadPhoto({ id }: { id: string }) {
       setUploadPhoto(true);
       console.log("in", url);
       await callDetection(url)
-        .then(function (response) {
+        .then((response) => {
+          console.log("response0000000", response);
+          if (response.data) {
+            setResultImages(response.data?.result_image);
+            setResult(response.data?.number);
+          }
           console.log(JSON.stringify(response.data));
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
 
@@ -98,6 +109,9 @@ function UploadPhoto({ id }: { id: string }) {
       alert("Please upload an image first!");
     } else {
       setUploadStatus(true);
+      setResultImages(null);
+      setUrl("");
+      setResult([]);
       const storageRef = ref(storage, `/meter/${id}/${file?.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
@@ -130,6 +144,27 @@ function UploadPhoto({ id }: { id: string }) {
     fetchPhoto();
   }, [fetchPhoto]);
 
+  const resultImage = () => {
+    if (url) {
+      if (uploadPhoto) {
+        return (
+          <div className="grid content-center justify-items-center w-full">
+            <Spin />
+          </div>
+        );
+      }
+      if (resultImages?.meter && resultImages?.number) {
+        return (
+          <>
+            <Image width={200} src={resultImages.meter} />
+            <Image width={200} src={resultImages.number} />
+            <h2>{result.join()}</h2>
+          </>
+        );
+      }
+    }
+    return "";
+  };
   return (
     <>
       <Row>
@@ -162,7 +197,7 @@ function UploadPhoto({ id }: { id: string }) {
       </Row>
       <Row>
         <Col span={10}>{url ? <Image width={200} src={url} /> : ""}</Col>
-        <Col span={14}>{url ? <Image width={200} src={url} /> : ""}</Col>
+        <Col span={14}>{resultImage()}</Col>
       </Row>
       <Row>
         <Col span={24}>
