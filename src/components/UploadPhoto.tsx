@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Col, Image, List, Progress, Row, Spin } from 'antd';
-import dayjs from 'dayjs';
+import { Button, Col, Image, List, Progress, Row, Spin } from "antd";
+import dayjs from "dayjs";
 import {
   addDoc,
   collection,
@@ -12,13 +12,20 @@ import {
   limit,
   query,
   where,
-} from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { ChangeEvent, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import config from '../config';
-import { db, storage } from '../firebaseConfig';
-import { callDetection } from '../hooks/fetch';
+import config from "../config";
+import { db, storage } from "../firebaseConfig";
+import { callDetection } from "../hooks/fetch";
 
 function UploadPhoto({
   id,
@@ -74,7 +81,7 @@ function UploadPhoto({
       console.log("in", url);
       await callDetection(url)
         .then(async (response) => {
-          if (response.data) {
+          if (response.data && response.data?.number?.length > 0) {
             setResultImages(response.data?.result_image);
             setResult(response.data?.number);
             await addDoc(photosCollection, {
