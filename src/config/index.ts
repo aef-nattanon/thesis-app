@@ -1,5 +1,5 @@
 const config = {
-  THESIS_API_URL: process.env.THESIS_API_URL || "http://128.199.150.225:5001",
+  THESIS_API_URL: process.env.THESIS_API_URL || "https://thesis-api-mz65meldjq-as.a.run.app",
 };
 
 export default config;
