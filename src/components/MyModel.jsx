@@ -1,30 +1,23 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { Col, Row } from 'antd';
 const tf = require('@tensorflow/tfjs');
 
 const weights = 'http://aef-nattanon.github.io/web_model/model.json';
 const names = ['meter', 'modle 1', 'model 2']
 
-class MyModel extends React.Component {
-  state = {
-    model: null,
-    preview: "",
-    predictions: []
-  };
 
-  componentDidMount() {
+function MeterModel({image}) {
+
+  const [model, setModel] = useState(null);
+
+  useEffect(() => {
     tf.loadGraphModel(weights).then(model => {
-      this.setState({
-        model: model
+      setModel(model)
       });
-    });
-  }
+  }, []);
 
-  // onDrop = (accepted, rejected, links) => {
-  //   this.setState({ preview: accepted[0].preview || links[0] });
-  // };
 
-  cropToCanvas = (image, canvas, ctx) => {
+  const cropToCanvas = (image, canvas, ctx) => {
     const naturalWidth = image.naturalWidth;
     const naturalHeight = image.naturalHeight;
 
@@ -51,17 +44,17 @@ class MyModel extends React.Component {
 
   };
 
-  onImageChange = e => {
+  const onImageChange = e => {
     const c = document.getElementById("canvas");
     const ctx = c.getContext("2d");
     ctx.clearRect(0, 0, c.width, c.height);
-    this.cropToCanvas(e.target, c, ctx);
-    let [modelWidth, modelHeight] = this.state.model.inputs[0].shape.slice(1, 3);
+    cropToCanvas(e.target, c, ctx);
+    let [modelWidth, modelHeight] = model.inputs[0].shape.slice(1, 3);
     const input = tf.tidy(() => {
       return tf.image.resizeBilinear(tf.browser.fromPixels(c), [modelWidth, modelHeight])
         .div(255.0).expandDims(0);
     });
-    this.state.model.executeAsync(input).then(res => {
+    model.executeAsync(input).then(res => {
       // Font options.
       const font = "16px sans-serif";
       ctx.font = font;
@@ -114,33 +107,30 @@ class MyModel extends React.Component {
     });
   };
 
-  render() {
-    console.log('this.props', this.props);
-    return (
-      <Row justify="center">
-        {this.state.model ? (
-          <>
-            <Col>
-              {this.props.image ? (
-                <img
-                  alt="upload preview"
-                  onLoad={this.onImageChange}
-                  className="Dropzone-img"
-                  src={this.props.image}
-                />
-              ) : ''}
-            </Col>
+  return (
+    <Row justify="center">
+      {model ? (
+        <>
+          <Col>
+            {image ? (
+              <img
+                alt="upload preview"
+                onLoad={onImageChange}
+                className="Dropzone-img"
+                src={image}
+              />
+            ) : ''}
+          </Col>
 
-            <Col>
-              <canvas id="canvas" />
-            </Col>
-          </>
-        ) : (
-          <div>Loading model...</div>
-        )}
-      </Row>
-    );
-  }
+          <Col>
+            <canvas id="canvas" />
+          </Col>
+        </>
+      ) : (
+        <div>Loading model...</div>
+      )}
+    </Row>
+  ); 
 }
 
-export default MyModel;
+export default MeterModel;
