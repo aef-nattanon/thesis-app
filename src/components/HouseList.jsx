@@ -1,16 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Layout, List, Spin, Typography } from 'antd';
-import { collection, DocumentData, getDocs, orderBy, query } from 'firebase/firestore';
+import { List, Spin, Typography } from 'antd';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { db } from '../firebaseConfig';
-
 const { Title } = Typography;
-const { Header, Sider, Content } = Layout;
+// const { Header, Sider, Content } = Layout;
 const HouseList = () => {
   const [loading, setLoading] = useState(false);
-  const [houses, setHouses] = useState<DocumentData[]>([]);
+  const [houses, setHouses] = useState([]);
   const housesCollection = useMemo(() => collection(db, "houses"), []);
 
   const navigate = useNavigate();

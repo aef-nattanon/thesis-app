@@ -5,7 +5,7 @@ import React from 'react';
 const antIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const { Content } = Layout;
-const Loading: React.FC = () => (
+const Loading = () => (
   <Content className="h-screen flex items-center place-content-center">
     <Spin indicator={antIcon} className="self-center" tip="Thesis App" />
   </Content>

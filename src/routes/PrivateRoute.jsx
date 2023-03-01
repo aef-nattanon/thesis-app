@@ -6,12 +6,10 @@ import NavBar from '../components/NavBar';
 import { useAppSelector } from '../hooks';
 import { selectToken } from '../slices/AuthSlice';
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 
 export default function PrivateRoute({
   children,
-}: {
-  children: React.ReactElement | null;
 }) {
   const token = useAppSelector(selectToken);
   console.log("==========", token, !token);

@@ -1,4 +1,4 @@
-import { ChangeEvent, SetStateAction, useState } from 'react';
+// import { ChangeEvent, SetStateAction, useState } from 'react';
 
 function ImageById() {
   return <div>{/* <UploadPhoto id="test" /> */}</div>;

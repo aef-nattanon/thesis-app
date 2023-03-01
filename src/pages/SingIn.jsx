@@ -5,18 +5,13 @@ import { Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectToken, singIn } from "../slices/AuthSlice";
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
-export interface UserData {
-  password: string;
-  username: string;
-  remember: boolean;
-}
 function SingIn() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const onFinish = async (values: UserData) => {
+  const onFinish = async (values) => {
     setLoading(true);
     if (
       (values.username === "demo1" || values.password === "demo2") &&
@@ -31,7 +26,7 @@ function SingIn() {
     setLoading(false);
   };
 
-  const onFinishFailed = (errorInfo: any) => {
+  const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 

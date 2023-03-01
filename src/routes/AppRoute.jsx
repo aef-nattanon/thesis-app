@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import About from '../pages/About';
@@ -12,7 +12,7 @@ import PrivateRoute from './PrivateRoute';
 // const About = lazy(() => import("../pages/About"));
 // const Home = lazy(() => import("../pages/Home"));
 
-const AppRoute: React.FC = () => {
+const AppRoute = () => {
   // const token = useAppSelector(selectToken);
   // if (!token) {
   //   return <Navigate to="/login" />;

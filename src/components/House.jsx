@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Input, List, Spin, Typography } from 'antd';
 import dayjs from 'dayjs';
-import { addDoc, collection, deleteDoc, DocumentData, getDocs, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { db } from '../firebaseConfig';
@@ -10,7 +10,7 @@ const { Title } = Typography;
 const House = () => {
   const [loading, setLoading] = useState(false);
   const [houseNumber, setHouseNumber] = useState("");
-  const [houses, setHouses] = useState<DocumentData[]>([]);
+  const [houses, setHouses] = useState([]);
   const housesCollection = useMemo(() => collection(db, "houses"), []);
 
   const addHouse = useCallback(async () => {
@@ -30,7 +30,7 @@ const House = () => {
     setLoading(false);
   }, [houseNumber]);
 
-  const deleteHouse = useCallback(async (house: DocumentData) => {
+  const deleteHouse = useCallback(async (house) => {
     setLoading(true);
     await deleteDoc(house.ref)
       .then(() => {

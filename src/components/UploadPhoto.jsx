@@ -5,9 +5,6 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  DocumentData,
-  DocumentReference,
-  DocumentSnapshot,
   getDocs,
   limit,
   query,
@@ -15,8 +12,6 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import {
-  ChangeEvent,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
@@ -31,29 +26,22 @@ function UploadPhoto({
   id,
   houseRef,
   house,
-}: {
-  id: string;
-  houseRef: DocumentReference;
-  house: DocumentSnapshot | null;
 }) {
   // State to store uploaded file
-  const [file, setFile] = useState<File | null>(null); // progress
+  const [file, setFile] = useState(null); // progress
   const [url, setUrl] = useState(""); // progress
 
   const [percent, setPercent] = useState(0); // Handle file upload event and update state
   const [uploadStatus, setUploadStatus] = useState(false);
   const [uploadPhoto, setUploadPhoto] = useState(false);
   const [photoLoading, setPhotoLoading] = useState(false);
-  const [result, setResult] = useState<string[]>([]);
-  const [resultImages, setResultImages] = useState<{
-    meter: string;
-    number: string;
-  } | null>(null);
+  const [result, setResult] = useState([]);
+  const [resultImages, setResultImages] = useState(null);
 
-  const [photos, setPhotos] = useState<DocumentData[]>([]);
+  const [photos, setPhotos] = useState([]);
   const photosCollection = useMemo(() => collection(db, "photos"), []);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event) => {
     if (event?.target) {
       const target = event?.target;
       target?.files && setFile(target?.files[0]);
@@ -76,7 +64,7 @@ function UploadPhoto({
   }, []);
 
   const addPhoto = useCallback(
-    async (url: string) => {
+    async (url) => {
       setUploadPhoto(true);
       console.log("in", url);
       await callDetection(url)
@@ -106,7 +94,7 @@ function UploadPhoto({
   );
 
   const deletePhoto = useCallback(
-    async (photo: DocumentData) => {
+    async (photo) => {
       setPhotoLoading(true);
       await deleteDoc(photo.ref)
         .then(() => {

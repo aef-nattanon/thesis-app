@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import config from '../config';
 
-export const callDetection = (url: string) =>
+export const callDetection = (url) =>
   axios({
     method: "post",
     url: `${config.THESIS_API_URL}/detection`,

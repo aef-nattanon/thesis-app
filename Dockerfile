@@ -7,8 +7,8 @@ COPY . .
 # Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
 # RUN npm ci 
 # Build the app
-RUN npm install -g typescript
-RUN npm link typescript
+# RUN npm install -g typescript
+# RUN npm link typescript
 RUN npm install react-scripts -g
 
 RUN npm run build

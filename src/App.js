@@ -1,8 +1,9 @@
+
 import './App.css';
 import 'antd/dist/reset.css';
 
 import { Layout } from 'antd';
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -11,7 +12,7 @@ import Loading from './components/Loading';
 import AppRoutes from './routes';
 import store from './store';
 
-const App: React.FC = () => {
+function App(){
   let persistor = persistStore(store);
   return (
     <Layout className="layout h-screen">

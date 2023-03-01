@@ -8,7 +8,7 @@ import { selectToken, singOut } from '../slices/AuthSlice';
 
 const { Sider } = Layout;
 
-const NavBar: React.FC = () => {
+const NavBar = () => {
   const dispatch = useAppDispatch();
   const [collapsed, setCollapsed] = useState(false);
   const token = useAppSelector(selectToken);
