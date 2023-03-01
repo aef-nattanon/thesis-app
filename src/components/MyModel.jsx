@@ -2,7 +2,8 @@ import React, { useState, useEffect} from "react";
 import { Col, Row } from 'antd';
 const tf = require('@tensorflow/tfjs');
 
-const weights = 'http://aef-nattanon.github.io/web_model/model.json';
+// const weights = 'http://aef-nattanon.github.io/web_model/model.json';
+const weights = '/web_model/model.json';
 const names = ['meter', 'modle 1', 'model 2']
 
 
