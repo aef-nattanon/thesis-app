@@ -1,28 +1,31 @@
-import React, { useRef } from "react";
-import { Camera } from "react-camera-pro";
-import { CameraOutlined } from '@ant-design/icons';
-import { Button, Row,Col } from 'antd';
+import React, { useState } from 'react';
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
 
+import ImagePreview from './ImagePreview'; // source code : ./src/demo/AppWithImagePreview/ImagePreview
 
-const Component = ({image, setImage}) => {
-  const camera = useRef(null);
+function App (props) {
+  const [dataUri, setDataUri] = useState('');
+
+  function handleTakePhotoAnimationDone (dataUri) {
+    console.log('takePhoto');
+    setDataUri(dataUri);
+  }
+
+  const isFullscreen = false;
   return (
-    <>
-      <Row justify="center">
-        <Col span={8}/>
-        <Col span={8}>
-          <Camera ref={camera} facingMode='environment' aspectRatio={1 / 1} />
-        </Col>
-        <Col span={8}/>
-      </Row>
-      <Row justify="center">
-
-      <Button className="mt-2" onClick={() => setImage(camera.current.takePhoto())}  shape="round" icon={<CameraOutlined />}>
-          ถ่าย
-        </Button>
-      </Row>
-    </>
+    <div>
+      {
+        (dataUri)
+          ? <ImagePreview dataUri={dataUri}
+            isFullscreen={isFullscreen}
+          />
+          : <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone}
+            isFullscreen={isFullscreen}
+          />
+      }
+    </div>
   );
 }
 
-export default Component;
+export default App;
