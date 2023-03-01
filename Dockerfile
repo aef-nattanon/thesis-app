@@ -1,4 +1,4 @@
-FROM node:16-alpine as builder
+FROM node:18-alpine as builder
 # Set the working directory to /app inside the container
 
 WORKDIR /app
@@ -7,6 +7,7 @@ COPY . .
 # Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
 # RUN npm ci 
 # Build the app
+RUN npm install -g npm@9.5.1
 RUN npm install
 # RUN npm install react-scripts -g
 RUN npm install serve -g
