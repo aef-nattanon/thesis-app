@@ -8,7 +8,7 @@ COPY . .
 # RUN npm ci 
 # Build the app
 RUN npm install
-RUN npm install react-scripts -g
+# RUN npm install react-scripts -g
 RUN npm install serve -g
 
 RUN npm run build
