@@ -8,7 +8,7 @@ function About() {
   const [image, setImage] = useState(null);
   return (
     <>
-      <h1>This is a PWA!!</h1>
+      <h1>My demo</h1>
       <WebcamCapture setImage={setImage} image={image} />
       <MyModel  setImage={setImage} image={image} />
     </>
