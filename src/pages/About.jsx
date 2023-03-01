@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 import MyModel from "../components/MyModel";
-import WebcamCapture from "../components/WebcamCapture";
+import WebcamCapture from "../components/WebcamCapturePro";
 
 function About() {
 
