@@ -25,6 +25,11 @@ const NavBar = () => {
       icon: <UploadOutlined />,
     },
     {
+      label: <Link to="/record">เก็บข้อมูล</Link>,
+      key: "5",
+      icon: <VideoCameraOutlined />,
+    },
+    {
       label: <Link to="/about">About</Link>,
       key: "_",
       icon: <VideoCameraOutlined />,

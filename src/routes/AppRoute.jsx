@@ -2,11 +2,12 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import About from '../pages/About';
+import EditHome from '../pages/EditHome';
 import Home from '../pages/Home';
-import HouseById from '../pages/HouseById';
 import Houses from '../pages/Houses';
-import ImageById from '../pages/ImageById';
-import Upload from '../pages/Upload';
+import NewHome from '../pages/NewHome';
+import Record from '../pages/Record';
+import RecordHouseById from '../pages/RecordHouseById';
 import PrivateRoute from './PrivateRoute';
 
 // const About = lazy(() => import("../pages/About"));
@@ -37,18 +38,34 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/upload"
+          path="/home/edit/:id"
           element={
             <PrivateRoute>
-              <Upload />
+              <EditHome />
             </PrivateRoute>
           }
         />
         <Route
-          path="/house/:id"
+          path="/home/new"
           element={
             <PrivateRoute>
-              <HouseById />
+              <NewHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/record"
+          element={
+            <PrivateRoute>
+              <Record />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/record/:id"
+          element={
+            <PrivateRoute>
+              <RecordHouseById />
             </PrivateRoute>
           }
         />
@@ -57,15 +74,6 @@ const AppRoute = () => {
           element={
             <PrivateRoute>
               <Houses />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/house/:id/:image"
-          element={
-            <PrivateRoute>
-              <ImageById />
             </PrivateRoute>
           }
         />

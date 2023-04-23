@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row } from 'antd';
 import * as tf from "@tensorflow/tfjs";
 
@@ -7,7 +7,7 @@ const weights = '/web_model/model.json';
 const names = ['meter', 'modle 1', 'model 2']
 
 
-function MeterModel({image}) {
+function MeterModel({ image }) {
 
   const [model, setModel] = useState(null);
   const [meterText, setMeterText] = useState('');
@@ -15,7 +15,7 @@ function MeterModel({image}) {
   useEffect(() => {
     tf.loadGraphModel(weights).then(model => {
       setModel(model)
-      });
+    });
   }, []);
 
 
@@ -103,9 +103,9 @@ function MeterModel({image}) {
       console.log('---------------')
       tf.dispose(res)
       var i;
-      for (i = 0; i < valid_detections_data; ++i){
+      for (i = 0; i < valid_detections_data; ++i) {
 
-        console.log('3 for', )
+        console.log('3 for',)
         let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
 
 
@@ -170,30 +170,30 @@ function MeterModel({image}) {
     <Row justify="center">
       {model ? (
         <>
-          <Col>
-            {image ? (
-              <img
-                alt="upload preview"
-                onLoad={onImageChange}
-                className="Dropzone-img"
-                src={image}
-              />
-            ) : ''}
-          </Col>
-
-          <Col>
-            <canvas id="canvas" className="Dropzone-img" />
-            <p>{ meterText}</p>
-          </Col>
-          <Col>
-            <canvas id="canvas2" />
-          </Col>
+          {image ? (
+            <>
+              <Col>
+                <img
+                  alt="upload preview"
+                  onLoad={onImageChange}
+                  className="Dropzone-img"
+                  src={image}
+                />
+              </Col>
+              <Col>
+                <canvas id="canvas" className="Dropzone-img" />
+                <p>{meterText}</p>
+              </Col>
+              <Col>
+                <canvas id="canvas2" />
+              </Col>
+            </>) : ''}
         </>
       ) : (
         <div>Loading model...</div>
       )}
     </Row>
-  ); 
+  );
 }
 
 export default MeterModel;

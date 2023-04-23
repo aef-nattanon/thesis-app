@@ -1,4 +1,4 @@
-import { Layout } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -6,7 +6,7 @@ import NavBar from '../components/NavBar';
 import { useAppSelector } from '../hooks';
 import { selectToken } from '../slices/AuthSlice';
 
-const { Content } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 export default function PrivateRoute({
   children,
@@ -17,17 +17,25 @@ export default function PrivateRoute({
     return <Navigate to="/login" />;
   }
   return (
-    <>
+    <Layout className='max-h-screen'>
       <NavBar />
-      <Content
-        className="site-layout-background"
-        style={{
-          margin: "24px 16px",
-          padding: 24,
-          minHeight: 280,
-        }}>
-        {children}
-      </Content>
-    </>
+      <Layout>
+
+        {/* <Header
+          style={{
+            padding: 0,
+          }}
+        /> */}
+        <Content
+          className="site-layout-background max-h-screen"
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+          }}>
+          {children}
+        </Content>
+      </Layout>
+    </Layout>
   );
 }

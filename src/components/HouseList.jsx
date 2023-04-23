@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { List, Spin, Typography } from 'antd';
+import { List, Spin } from 'antd';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs'
 
 import { db } from '../firebaseConfig';
-const { Title } = Typography;
 // const { Header, Sider, Content } = Layout;
 const HouseList = () => {
   const [loading, setLoading] = useState(false);
@@ -30,9 +30,9 @@ const HouseList = () => {
   }, []);
 
   return (
-    <section className="house-container  max-h-full ">
-      <Title level={2}>บ้าน</Title>
-      <div className="bg-white p-2 mt-2 bg mix-h-[35rem] max-h-[35rem] overflow-auto rounded-md">
+    <>
+      <div className="bg-white p-2 mt-2 bg mix-h-[35rem] max-h-[35rem] overflow-auto rounded-md"
+        style={{ maxHeight: "80vh" }}>
         <List
           dataSource={houses}
           renderItem={(house) => (
@@ -47,10 +47,22 @@ const HouseList = () => {
               // ]}
 
               onClick={() => {
-                navigate(`/house/${house.id}`);
+                navigate(`/record/${house.id}`);
               }}>
-              <List.Item.Meta title={house?.data()?.house_number} />
-              <List.Item.Meta title={house?.data()?.cerate_at} />
+              <List.Item.Meta
+                title={house?.data()?.house_number}
+              />
+
+              <List.Item.Meta
+                title='เลขผู้ใช้น้ำ'
+                description={house?.data()?.unit_number || '-'}
+              />
+              <List.Item.Meta
+                title='วันที่สร้าง'
+                description={dayjs(house?.data()?.cerate_at).format(
+                  "DD/MMM/YYYY",
+                )}
+              />
             </List.Item>
           )}>
           {loading && (
@@ -73,7 +85,7 @@ const HouseList = () => {
             </div>
           ))} */}
       </div>
-    </section>
+    </>
   );
 };
 

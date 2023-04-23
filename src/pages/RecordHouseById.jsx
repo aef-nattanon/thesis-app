@@ -1,5 +1,5 @@
 import { collection, doc, getDoc } from 'firebase/firestore';
-import {  useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import UploadPhoto from '../components/UploadPhoto';
@@ -24,10 +24,10 @@ function HouseById() {
   }, [fetchHouse]);
 
   return (
-    <div>
+    <section className="max-h-screen">
       house_number: {house?.data()?.house_number}
       <UploadPhoto id={`${id}`} houseRef={houseRef} house={house} />
-    </div>
+    </section>
   );
 }
 
