@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, List, Spin, Typography, Col, Row } from 'antd';
+import { Button, List, Spin, Typography, Col, Row, Badge, Table, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
@@ -14,6 +14,55 @@ const House = () => {
   const housesCollection = useMemo(() => collection(db, "houses"), []);
   const navigate = useNavigate();
 
+  const columns = [
+    {
+      title: 'บ้านเลขที่',
+      render: (_, house = {}) => (<>{house?.data()?.house_number}</>),
+
+      // sorter: true,
+      // onFilter: (value, house) => house?.data()?.house_number.indexOf(value) === 0,
+    },
+    {
+      title: 'เลขผู้ใช้น้ำ',
+      render: (_, house = {}) => (<>{house?.data()?.unit_number || '-'}</>)
+    },
+    {
+      title: 'จำนวนทศนิยม',
+      align: 'center',
+      render: (_, house = {}) => ( 
+              <Tag color='gold'>
+                {house?.data()?.decimal_places || '-'}
+              </Tag>
+      ),
+    },
+    {
+      title: 'จำนวนหน่วยสูงสุด',
+      align: 'center',
+      render: (_, house = {}) => ( 
+              <Tag color='green'>
+                {house?.data()?.max_value || '-'}
+              </Tag>
+      ),
+    },
+    {
+      title: 'วันที่สร้าง',
+      render: (_, house = {}) => (<>{dayjs(house?.data()?.cerate_at).format("DD/MMM/YYYY")}</>)
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (_, house) => (
+        <Button
+        disabled={false}
+        block
+        onClick={() => {
+          navigate(`/home/edit/${house.id}`);
+        }}>
+        จัดการ
+      </Button>
+      ),
+    },
+  ];
 
   const fetchPost = useCallback(async () => {
     setLoading(true);
@@ -30,8 +79,10 @@ const House = () => {
     fetchPost();
   }, []);
 
+  console.log('---',houses)
+
   return (
-    <section className="max-h-screen">
+    <section className="max-h-screen p-3 m-2">
       {/* <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
       </Breadcrumb> */}
@@ -46,68 +97,22 @@ const House = () => {
             onClick={() => {
               navigate(`/home/new`);
             }}>
-            +เพิ่มบ้าน
+            + เพิ่มบ้าน
           </Button>
         </Col>
       </Row>
 
       <section
-        style={{ maxHeight: "80vh" }}
-        className="bg-white p-2 mt-2 bg overflow-auto  ">
-        <List
-          dataSource={houses}
-          renderItem={(house) => (
-            <List.Item
-              key={house.id}
-              actions={[
-                <Button
-                  disabled={false}
-                  className="btn"
-                  onClick={() => {
-                    navigate(`/home/edit/${house.id}`);
-                  }}>
-                  จัดการ
-                </Button>
-              ]}>
-              <List.Item.Meta
-                title={house?.data()?.house_number}
-              />
-
-              <List.Item.Meta
-                title='เลขผู้ใช้น้ำ'
-                description={house?.data()?.unit_number || '-'}
-              />
-              <List.Item.Meta
-                title='จำนวนทศนิยม'
-                description={house?.data()?.decimal_places || '-'}
-              />
-              <List.Item.Meta
-                title='วันที่สร้าง'
-                description={dayjs(house?.data()?.cerate_at).format(
-                  "DD/MMM/YYYY",
-                )}
-              />
-            </List.Item>
-          )}>
-          {loading && (
-            <div className="grid content-center justify-items-center w-full">
+        style={{ maxHeight: "85vh" }}
+        className="bg-white bg overflow-auto  ">
+        {loading? 
+            <div className="grid content-center justify-items-center w-full mt-8 pt-8 mb-8 pb-8">
               <Spin />
-            </div>
-          )}
-        </List>
-
-        {/* {houses?.map((house) => (
-            <div key={house.id}>
-              <p>{house?.data()?.house_number}</p>
-              <button
-                disabled={false}
-                type="submit"
-                className="btn"
-                onClick={() => deleteHouse(house)}>
-                ลบ
-              </button>
-            </div>
-          ))} */}
+            </div>:
+          <Table columns={columns} scroll={{
+            y: '75vh',
+          }} dataSource={houses} pagination={ false} />
+        }
       </section>
     </section>
   );

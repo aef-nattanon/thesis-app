@@ -29,8 +29,6 @@ export default function PrivateRoute({
         <Content
           className="site-layout-background max-h-screen"
           style={{
-            margin: "24px 16px",
-            padding: 24,
             minHeight: 280,
           }}>
           {children}

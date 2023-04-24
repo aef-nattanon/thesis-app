@@ -31,7 +31,7 @@ const House = () => {
   }, []);
 
   return (
-    <section className="max-h-screen">
+    <section className="max-h-screen p-3 m-2">
       {/* <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
       </Breadcrumb> */}
@@ -39,15 +39,7 @@ const House = () => {
       <Row>
         <Col span={8}><Title level={2}>หน้าหลัก</Title></Col>
         <Col span={4} offset={12}>
-          <Button
-
-            style={{ backgroundColor: "#1890ff", color: 'white' }}
-            className="btn"
-            onClick={() => {
-              navigate(`/home/new`);
-            }}>
-            +เพิ่มบ้าน
-          </Button>
+         
         </Col>
       </Row>
 

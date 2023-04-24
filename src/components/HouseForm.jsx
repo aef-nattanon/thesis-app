@@ -1,10 +1,9 @@
 import {
   Button, Form, Input,
-  Select
+  Select, Popconfirm, InputNumber
 } from 'antd';
 
 import { useNavigate } from 'react-router-dom';
-
 
 const layout = {
   labelCol: {
@@ -68,13 +67,18 @@ const HouseForm = ({
         label="เลขผู้ใช้น้ำ"
         rules={[
           {
-            // required: true,
+            required: true,
           },
         ]}
       >
         <Input />
       </Form.Item>
-      <Form.Item name='address' label="ที่อยู่">
+      <Form.Item 
+        rules={[
+          {
+            required: true,
+          },
+        ]} name='address' label="ที่อยู่">
         <Input.TextArea />
       </Form.Item>
       <Form.Item
@@ -94,6 +98,15 @@ const HouseForm = ({
         </Select>
       </Form.Item>
       <Form.Item
+        name='max_value'
+        label="จำนวนหน่วยสูงสุด" rules={[
+          {
+            required: true,
+          },
+        ]}>
+        <InputNumber />
+      </Form.Item>
+      <Form.Item
         wrapperCol={{
           ...layout.wrapperCol,
           offset: 8,
@@ -108,14 +121,26 @@ const HouseForm = ({
           htmlType="button">
           กลับ
         </Button>
-        {handleDeleteHouse && <Button
-          className='ml-3'
-          disabled={isLoading}
-          onClick={handleDeleteHouse}
-          style={{ backgroundColor: "#F0431E" }}
-          type="primary" htmlType="button">
-          ลบบ้าน
-        </Button>}
+        {handleDeleteHouse &&
+          
+          <Popconfirm
+            title="ลบบ้าน"
+            description={`ต้องการ ลบบ้าน ${initialValues?.house_number} หรือไม่?`}
+            onConfirm={handleDeleteHouse}
+            // onCancel={cancel}
+            okText="ใช่"
+            cancelText="ไม่"
+          >
+            <Button
+                  className='ml-3'
+                  disabled={isLoading}
+                  style={{ backgroundColor: "#F0431E" }}
+                  type="primary" htmlType="button">
+                  ลบบ้าน
+                </Button>
+          </Popconfirm>
+                  
+         }
         <Button
           className='ml-3'
           loading={isLoading}

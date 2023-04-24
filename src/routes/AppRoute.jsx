@@ -6,8 +6,10 @@ import EditHome from '../pages/EditHome';
 import Home from '../pages/Home';
 import Houses from '../pages/Houses';
 import NewHome from '../pages/NewHome';
-import Record from '../pages/Record';
+import Records from '../pages/Records';
 import RecordHouseById from '../pages/RecordHouseById';
+import NewRecordHouseById from '../pages/NewRecordHouseById';
+import EditRecordHouseById from '../pages/EditRecordHouseById';
 import PrivateRoute from './PrivateRoute';
 
 // const About = lazy(() => import("../pages/About"));
@@ -54,10 +56,10 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/record"
+          path="/records"
           element={
             <PrivateRoute>
-              <Record />
+              <Records />
             </PrivateRoute>
           }
         />
@@ -66,6 +68,22 @@ const AppRoute = () => {
           element={
             <PrivateRoute>
               <RecordHouseById />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/record/:id/new"
+          element={
+            <PrivateRoute>
+              <NewRecordHouseById />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/record/:id/edit/:record_id"
+          element={
+            <PrivateRoute>
+              <EditRecordHouseById />
             </PrivateRoute>
           }
         />

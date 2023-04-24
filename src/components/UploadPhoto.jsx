@@ -266,8 +266,9 @@ function UploadPhoto({
 
                     <List.Item.Meta title={photo?.data()?.result.join()} />
                     <List.Item.Meta
+                    
                       title={dayjs(photo?.data()?.cerate_at).format(
-                        "DD-MMM-YYYY HH:mm:ss",
+                        "DD/MMM/YYYY",
                       )}
                     />
                   </List.Item>

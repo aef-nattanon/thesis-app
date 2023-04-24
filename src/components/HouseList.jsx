@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { List, Spin } from 'antd';
+import { List, Spin, Table, Button, Tag} from 'antd';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,24 @@ const HouseList = () => {
   const housesCollection = useMemo(() => collection(db, "houses"), []);
 
   const navigate = useNavigate();
+
+  const columns = [
+    {
+      title: 'บ้านเลขที่',
+      render: (_, house = {}) => (<>{house?.data()?.house_number}</>),
+
+      // sorter: true,
+      // onFilter: (value, house) => house?.data()?.house_number.indexOf(value) === 0,
+    },
+    {
+      title: 'เลขผู้ใช้น้ำ',
+      render: (_, house = {}) => (<>{house?.data()?.unit_number || '-'}</>)
+    },
+    {
+      title: 'วันที่สร้าง',
+      render: (_, house = {}) => (<>{dayjs(house?.data()?.cerate_at).format("DD/MMM/YYYY")}</>)
+    },
+  ];
 
   const fetchPost = useCallback(async () => {
     setLoading(true);
@@ -31,9 +49,26 @@ const HouseList = () => {
 
   return (
     <>
-      <div className="bg-white p-2 mt-2 bg mix-h-[35rem] max-h-[35rem] overflow-auto rounded-md"
-        style={{ maxHeight: "80vh" }}>
-        <List
+      <section
+        style={{ maxHeight: "85vh" }}
+        className="bg-white bg overflow-auto  ">
+         {loading? 
+            <div className="grid content-center justify-items-center w-full mt-8 pt-8 mb-8 pb-8">
+              <Spin />
+            </div>:
+          <Table columns={columns}
+          onRow={(record, _) => {
+            return {
+              onClick: () => 
+                navigate(`/record/${record.id}`)
+            };
+          }}
+            scroll={{
+            y: '75vh',
+          }} dataSource={houses} pagination={ false} />
+        }
+
+        {/* <List
           dataSource={houses}
           renderItem={(house) => (
             <List.Item
@@ -70,7 +105,7 @@ const HouseList = () => {
               <Spin />
             </div>
           )}
-        </List>
+        </List> */}
 
         {/* {houses?.map((house) => (
             <div key={house.id}>
@@ -84,7 +119,7 @@ const HouseList = () => {
               </button>
             </div>
           ))} */}
-      </div>
+      </section>
     </>
   );
 };

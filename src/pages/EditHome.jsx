@@ -79,15 +79,15 @@ const EditHome = () => {
     return <Navigate to="/houses?successText=ลบแล้ว" />;
   }
   return (
-    <section className="max-h-screen content-center justify-items-center max-w-screen">
+    <section className="max-h-screen content-center justify-items-center max-w-screen p-3 m-2">
       {contextHolder}
       <section className="p-2">
         <Breadcrumb
           items={[
             {
-              title: 'หน้าหลัก',
+              title: 'บ้าน',
               onClick: () => {
-                navigate(`/`);
+                navigate(`/houses`);
               }
             },
             {

@@ -32,7 +32,7 @@ function App({ setImage }) {
       onTakePhotoAnimationDone={(dataUri) => { handleTakePhotoAnimationDone(dataUri); }}
       onCameraError={(error) => { handleCameraError(error); }}
       idealFacingMode={FACING_MODES.ENVIRONMENT}
-      idealResolution={{ width: 640, height: 640 }}
+      // idealResolution={{ width: 640, height: 640 }}
       imageType={IMAGE_TYPES.JPG}
       imageCompression={0.97}
       isMaxResolution={true}
