@@ -78,7 +78,7 @@ export default function About() {
       </section>
       <WebcamCapture setImage={setImage} image={image} />
       {/* <MyModel setImage={setImage} image={image} /> */}
-      <ReadPhoto image={image} id={id} houseRef={houseRef} house={house} />
+      {house && <ReadPhoto image={image} id={id} houseRef={houseRef} house={house} />}
     </section >
   );
 }
