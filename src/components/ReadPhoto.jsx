@@ -139,12 +139,22 @@ function ReadPhoto({
                     </Col>
                 </Row>
                 <Row className="pt-1">
-                <Col span={12} className="grid justify-items-end">
+                  <Col span={12} className="grid justify-items-end">
+                  จำนวนทศนิยม: 
+                    </Col>
+                    <Col span={12} className="grid justify-items-end">
+
+                      <Tag color=""> {decimal_places }</Tag>
+                   
+                    </Col>
+                </Row>
+                <Row className="pt-1">
+                  <Col span={12} className="grid justify-items-end">
                       ค่าที่อ่าน: 
                     </Col>
                     <Col span={12} className="grid justify-items-end">
 
-                      <Tag color="cyan"> {parseInt(result.join('')) * (1/ Math.pow(10,parseInt(decimal_places))) }</Tag>
+                      <Tag color="blue"> {Number(Number(result.join('')) * (1/ Math.pow(10,parseInt(decimal_places)))).toFixed(2) }</Tag>
                    
                     </Col>
                 </Row>
@@ -156,8 +166,6 @@ function ReadPhoto({
               </Col>
             </Row>
           </Card>
-            
-           
           );
         } else {
           return (
